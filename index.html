@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Number</title>
+    <style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        body{
+            background-color: #212121;
+            color: white;
+        }
+
+        button{
+            padding: 8px 16px;
+            font-size: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+            color: white;
+            background-color: black;
+            border: none;
+        }
+        .center{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 400px;
+            background-color: rgb(54, 54, 54);
+            flex-direction: column;
+            padding: 0 20px;
+        }
+
+        input{
+            padding: 4px 10px;
+        }
+
+        #previous-guess{
+            margin: 10px 0;
+        }
+
+        #rem-guess{
+            margin: 20px 0;
+        }
+
+        #result{
+            background-color: rgb(183, 121, 6);
+            padding: 8px 16px;
+            font-size: 20px;
+            color: black;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="center">
+    <div class="container center">
+        <h2>Number Guessing Game</h2>
+        <p>Try and guess a random number between 1 to 1000</p>
+        <p>you have 10 attempts to guess the right number</p>
+
+        <h1>Guess a number</h1>
+
+        <input type="number" autocomplete="off" id="guess-number">
+        <button id="submit-btn">submit guess</button>
+        <div id="previous-guess">
+            <span>Previous Guesses: </span>
+            <span id="prev-guess"></span>
+        </div>
+        <div id="rem-guess">
+            <span>Guesses Remaining: </span>
+            <span id="reamining-guesses"></span>
+        </div>
+
+        <p id="result">Result</p>
+    </div>
+</body>
+
+<script>
+    const showResult = document.querySelector("#result")
+    let guessChanges = 10
+
+    function chackGuessNumber(guessNum, randomNum) {
+        if(guessNum == randomNum) return 1
+
+        return 0
+    }
+
+    function putPreviousGuesses(guessNumber){
+        document.querySelector("#prev-guess").appendChild(document.createTextNode(`${guessNumber} `))
+    }
+
+    function showChanges() {
+        document.querySelector("#reamining-guesses").innerText = guessChanges;
+    }
+
+    function gameReset() {
+        document.querySelector("#prev-guess").innerText = ''
+        document.querySelector("#reamining-guesses").innerText = ''
+        guessChanges = 10
+        showChanges()
+        randomNumber = Math.floor(Math.random() * 100 + 1)
+    }
+    
+
+    let randomNumber = Math.floor(Math.random() * 100 + 1)
+    showChanges()
+
+   
+
+    const submitRespons =  () =>{
+
+        const guessNumber = Number(document.querySelector('#guess-number').value);
+       
+        // after getting number reset the intput field
+        document.querySelector('#guess-number').value = ''
+        
+       
+
+        if(guessNumber > 0 && guessNumber <= 100 && guessChanges > 0) {
+            guessChanges--;
+            showChanges()
+
+            if(guessNumber == randomNumber){
+                showResult.innerText = 'you win this game'
+                
+            }else if(guessNumber < randomNumber) {
+                    showResult.innerText = `Random Value > ${guessNumber}`
+            }else {
+                showResult.innerText = `Random Value < ${guessNumber}`
+            }
+
+            // show in Previous Guesses
+            putPreviousGuesses(guessNumber)
+
+            // if changes is zero
+            if(guessChanges == 0) {
+                showResult.innerText = `Game Over: Random number was ${randomNumber}`
+
+                alert('reset this game')
+                gameReset()
+            }
+        }else {
+            showResult.innerText = 'Number must be between 1 to 100'
+        }
+
+    }
+
+
+    window.addEventListener('keydown', function(e){
+        if(e.key >= '0' && e.key <= 9) {
+            document.querySelector('#guess-number').focus();
+        }
+
+        if(e.key === 'Enter') {
+            submitRespons()
+        }
+    })
+
+    document.querySelector('#submit-btn').addEventListener('click',submitRespons)
+</script>
+</html>
